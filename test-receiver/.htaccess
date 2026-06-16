@@ -1,0 +1,15 @@
+Options -Indexes
+DirectoryIndex index.php
+
+# Pass Authorization header through to PHP (Apache strips it by default)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteRule ^inc/ - [F,L]
+</IfModule>
+
+# Block direct access to config
+<FilesMatch "^config\.php$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

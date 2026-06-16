@@ -1,0 +1,110 @@
+API Responses
+
+
+
+Response: Status Success
+
+{
+  "status": "Success",
+  "summary": {
+    "total": 2,
+    "success": 2,
+    "duplicate": 0,
+    "failed": 0
+  },
+  "results": [
+    {
+      "status": "success",
+      "insert_id": 0,
+      "container_no": "REC0001"
+    },
+    {
+      "status": "success",
+      "insert_id": 0,
+      "container_no": "REC0002"
+    }
+  ]
+}
+
+
+
+
+Response: With Duplicate Entry Result
+{
+  "status": "Success",
+  "summary": {
+    "total": 2,
+    "success": 0,
+    "duplicate": 2,
+    "failed": 0
+  },
+  "results": [
+    {
+      "status": "duplicate",
+      "container_no": "REC0001"
+    },
+    {
+      "status": "duplicate",
+      "container_no": "REC0002"
+    }
+  ]
+}
+
+
+
+
+
+Response: With failed Result Required fields
+{
+  "status": "Success",
+  "summary": {
+    "total": 1,
+    "success": 0,
+    "duplicate": 0,
+    "failed": 1
+  },
+  "results": [
+    {
+      "status": "error",
+      "message": "port is required"
+    }
+  ]
+}
+
+
+
+Response: 
+Status: Error
+
+{
+  "status": "error",
+  "message": "Invalid format"
+}
+
+
+
+Invalid Token
+
+{
+  "status": "error",
+  "message": "Unauthorized (Invalid token)"
+}
+
+
+
+Missing Token
+
+{
+  "status": "error",
+  "message": "Missing Authorization token"
+}
+
+
+
+IP NOT WHITELISTED
+
+{
+  "status": "error",
+  "message": "IP not whitelisted",
+  "your_ip": "127.0.0.1"
+}

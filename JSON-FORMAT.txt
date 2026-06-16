@@ -1,0 +1,103 @@
+Load:
+port
+shipping_line
+vessel_name
+container_no
+container_size
+container_load
+registry_no
+loading_date
+loading_time
+exporter
+description
+
+
+Release:
+port
+shipping_line
+vessel_name
+container_no
+container_size
+container_load
+registry_no
+bl_no
+master_bl
+discharge_date
+consignee
+notify_party
+description
+date_issue
+time_issue
+plate_no
+date_departure
+time_departure
+
+
+Receive:
+port
+shipping_line
+vessel_name
+container_no
+container_size
+container_load
+registry_no
+gate_pass_date
+gate_pass_time
+plate_no
+date_receive
+time_receive
+exporter
+description
+
+
+Discharge:
+port
+shipping_line
+vessel_name
+voyage_no
+container_no
+container_size
+container_load
+container_owner
+registry_no
+bl_no
+master_bl
+discharge_date
+consignee
+notify_party
+description
+gross_weight
+tare_weight
+declared_weight
+manifest_weight
+
+
+
+
+
+
+
+
+Sample Format:
+{
+	"data": [
+		{
+			"port": "MNL",
+			"shipping_line": "CMA"
+			....
+		},
+		{
+			"port": "MNL",
+			"shipping_line": "CMA"
+			....
+		},
+		...
+	]
+}
+
+
+
+
+
+
+
