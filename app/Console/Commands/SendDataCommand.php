@@ -26,9 +26,16 @@ class SendDataCommand extends Command
 
     public function handle(): int
     {
-        $types = $this->option('type') === 'all'
-            ? ['discharge', 'load', 'release', 'receive']
-            : [$this->option('type')];
+        if ($this->option('type') === 'all') {
+            $raw   = Setting::get('auto_send_types', 'discharge,load,release,receive');
+            $types = array_values(array_filter(explode(',', $raw)));
+            if (empty($types)) {
+                $this->warn('No data types enabled for auto-send. Exiting.');
+                return self::SUCCESS;
+            }
+        } else {
+            $types = [$this->option('type')];
+        }
 
         $from = $this->option('from')
             ? Carbon::parse($this->option('from'))

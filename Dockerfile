@@ -62,9 +62,6 @@ RUN npm ci
 # Copy application files
 COPY . .
 
-# Build frontend assets
-RUN npm run build
-
 # Finalise Composer autoloader
 RUN composer dump-autoload --optimize --ignore-platform-reqs
 
@@ -74,6 +71,8 @@ RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/bootstrap/cache
 
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 9000
 

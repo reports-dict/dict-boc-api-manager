@@ -5,7 +5,7 @@ import { useState } from 'react';
 interface Settings {
     api_base_url: string; api_token_set: boolean;
     endpoint_discharge: string; endpoint_load: string; endpoint_release: string; endpoint_receive: string;
-    auto_send_enabled: string; auto_send_time: string;
+    auto_send_enabled: string; auto_send_time: string; auto_send_types: string[];
     email_report_enabled: string; email_report_recipients: string; email_smtp_password_set: boolean;
 }
 
@@ -19,6 +19,7 @@ export default function SettingsIndex({ settings }: { settings: Settings }) {
         endpoint_receive: settings.endpoint_receive ?? '',
         auto_send_enabled: settings.auto_send_enabled === '1',
         auto_send_time: settings.auto_send_time ?? '00:05',
+        auto_send_types: settings.auto_send_types ?? ['discharge', 'load', 'release', 'receive'],
         email_report_enabled: settings.email_report_enabled === '1',
         email_report_recipients: settings.email_report_recipients ?? '',
         email_smtp_password: '',
@@ -103,14 +104,40 @@ export default function SettingsIndex({ settings }: { settings: Settings }) {
                             </label>
                         </div>
                         {data.auto_send_enabled && (
-                            <div className="mt-3">
-                                <label className="block text-xs font-medium text-gray-500 mb-1">Send Time</label>
-                                <input
-                                    type="time"
-                                    value={data.auto_send_time}
-                                    onChange={(e) => setData('auto_send_time', e.target.value)}
-                                    className="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                />
+                            <div className="mt-3 space-y-3">
+                                <div>
+                                    <label className="block text-xs font-medium text-gray-500 mb-1">Send Time</label>
+                                    <input
+                                        type="time"
+                                        value={data.auto_send_time}
+                                        onChange={(e) => setData('auto_send_time', e.target.value)}
+                                        className="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-medium text-gray-500 mb-2">Data Types to Send</label>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {(['discharge', 'load', 'release', 'receive'] as const).map((type) => (
+                                            <label key={type} className="flex items-center gap-2 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={data.auto_send_types.includes(type)}
+                                                    onChange={(e) => {
+                                                        const next = e.target.checked
+                                                            ? [...data.auto_send_types, type]
+                                                            : data.auto_send_types.filter((t) => t !== type);
+                                                        setData('auto_send_types', next);
+                                                    }}
+                                                    className="accent-blue-600"
+                                                />
+                                                <span className="text-xs text-gray-700 capitalize">{type}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                    {data.auto_send_types.length === 0 && (
+                                        <p className="text-xs text-amber-600 mt-1">At least one type must be selected.</p>
+                                    )}
+                                </div>
                             </div>
                         )}
                     </div>

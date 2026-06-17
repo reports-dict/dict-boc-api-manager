@@ -7,8 +7,10 @@ services:
     container_name: dict_boc_app
     restart: unless-stopped
     working_dir: /var/www
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
     volumes:
       - .:/var/www
+      - node_modules:/var/www/node_modules
       - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
     networks:
       - dict_boc_net
@@ -50,3 +52,6 @@ networks:
     driver: bridge
   mysql8_default:
     external: true
+
+volumes:
+  node_modules:

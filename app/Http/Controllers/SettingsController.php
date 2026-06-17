@@ -17,6 +17,7 @@ class SettingsController extends Controller
         'endpoint_receive',
         'auto_send_enabled',
         'auto_send_time',
+        'auto_send_types',
         'email_report_enabled',
         'email_report_recipients',
     ];
@@ -30,6 +31,9 @@ class SettingsController extends Controller
 
         $settings['api_token_set']           = ! empty(Setting::get('api_token'));
         $settings['email_smtp_password_set']  = ! empty(Setting::get('email_smtp_password'));
+
+        $rawTypes = Setting::get('auto_send_types', 'discharge,load,release,receive');
+        $settings['auto_send_types'] = array_values(array_filter(explode(',', $rawTypes)));
 
         return Inertia::render('Settings/Index', ['settings' => $settings]);
     }
@@ -45,13 +49,17 @@ class SettingsController extends Controller
             'api_token'               => ['nullable', 'string'],
             'auto_send_enabled'       => ['boolean'],
             'auto_send_time'          => ['nullable', 'date_format:H:i'],
+            'auto_send_types'         => ['nullable', 'array'],
+            'auto_send_types.*'       => ['in:discharge,load,release,receive'],
             'email_report_enabled'    => ['boolean'],
             'email_report_recipients' => ['nullable', 'string'],
             'email_smtp_password'     => ['nullable', 'string'],
         ]);
 
         foreach ($this->settingKeys as $key) {
-            if ($request->has($key)) {
+            if ($key === 'auto_send_types') {
+                Setting::set('auto_send_types', implode(',', $request->input('auto_send_types', [])));
+            } elseif ($request->has($key)) {
                 Setting::set($key, $request->input($key));
             }
         }

@@ -38,13 +38,15 @@ export default function SendIndex({
         setPreviewing(true);
         setPreview(null);
         try {
+            const xsrfToken = decodeURIComponent(
+                (document.cookie.match(/XSRF-TOKEN=([^;]+)/) ?? [])[1] ?? ''
+            );
             const res = await fetch('/send/preview', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': (document.cookie.match(/XSRF-TOKEN=([^;]+)/) ?? [])[1] ?? '',
+                    'X-XSRF-TOKEN': xsrfToken,
                     'Accept': 'application/json',
-                    'X-Inertia': 'false',
                 },
                 body: JSON.stringify(data),
             });
