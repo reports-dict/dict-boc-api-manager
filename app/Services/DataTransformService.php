@@ -74,7 +74,7 @@ class DataTransformService
                 'container_size'  => (int) $row['container_size'],
                 'container_load'  => $row['container_load'],
                 'registry_no'     => $row['registry_no'],
-                'bl_no'           => $row['bl_no'],
+                'bl_no'           => $row['bl_no'] !== null ? str_replace(' ', '', $row['bl_no']) : null,
                 'master_bl'       => $row['master_bl'],
                 'discharge_date'  => $row['discharged_date'],
                 'consignee'       => $row['consignee'],
