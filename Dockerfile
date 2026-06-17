@@ -62,6 +62,9 @@ RUN npm ci
 # Copy application files
 COPY . .
 
+# Build frontend assets
+RUN npm run build
+
 # Finalise Composer autoloader
 RUN composer dump-autoload --optimize --ignore-platform-reqs
 
