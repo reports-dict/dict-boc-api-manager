@@ -8,7 +8,7 @@ interface Transmission {
     records_count: number; success_count: number; failed_count: number; duplicate_count: number;
     triggered_by: string; sent_by: string | null; created_at: string;
 }
-interface Paginated<T> { data: T[]; current_page: number; last_page: number; total: number; }
+interface Paginated<T> { data: T[]; current_page: number; last_page: number; total: number; from: number | null; to: number | null; }
 
 export default function TransmissionsIndex({
     transmissions,
@@ -135,21 +135,70 @@ export default function TransmissionsIndex({
                 </div>
 
                 {/* Pagination */}
-                {transmissions.last_page > 1 && (
-                    <div className="px-4 py-3 border-t border-gray-100 flex gap-2">
-                        {Array.from({ length: transmissions.last_page }, (_, i) => i + 1).map((page) => (
-                            <button
-                                key={page}
-                                onClick={() => router.get('/transmissions', { ...f, page: String(page) })}
-                                className={`px-2 py-1 text-xs rounded ${
-                                    page === transmissions.current_page
-                                        ? 'bg-blue-600 text-white'
-                                        : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
-                                }`}
-                            >
-                                {page}
-                            </button>
-                        ))}
+                {transmissions.last_page >= 1 && (
+                    <div className="px-4 py-3 border-t border-gray-100 flex items-center justify-between gap-2">
+                        {/* Record count */}
+                        <p className="text-xs text-gray-400">
+                            {transmissions.from != null
+                                ? `Showing ${transmissions.from}–${transmissions.to} of ${transmissions.total}`
+                                : 'No results'}
+                        </p>
+
+                        {/* Page buttons */}
+                        {transmissions.last_page > 1 && (
+                            <div className="flex items-center gap-1">
+                                {/* Previous */}
+                                <button
+                                    onClick={() => router.get('/transmissions', { ...f, page: String(transmissions.current_page - 1) })}
+                                    disabled={transmissions.current_page === 1}
+                                    className="px-2 py-1 text-xs border border-gray-300 rounded text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                                >
+                                    ‹ Prev
+                                </button>
+
+                                {/* Page numbers with ellipsis */}
+                                {(() => {
+                                    const cur  = transmissions.current_page;
+                                    const last = transmissions.last_page;
+                                    const pages: (number | '...')[] = [];
+
+                                    for (let p = 1; p <= last; p++) {
+                                        if (p === 1 || p === last || (p >= cur - 1 && p <= cur + 1)) {
+                                            pages.push(p);
+                                        } else if (pages[pages.length - 1] !== '...') {
+                                            pages.push('...');
+                                        }
+                                    }
+
+                                    return pages.map((p, i) =>
+                                        p === '...' ? (
+                                            <span key={`ellipsis-${i}`} className="px-1 text-xs text-gray-400">…</span>
+                                        ) : (
+                                            <button
+                                                key={p}
+                                                onClick={() => router.get('/transmissions', { ...f, page: String(p) })}
+                                                className={`min-w-[28px] px-2 py-1 text-xs rounded ${
+                                                    p === cur
+                                                        ? 'bg-blue-600 text-white font-medium'
+                                                        : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
+                                                }`}
+                                            >
+                                                {p}
+                                            </button>
+                                        )
+                                    );
+                                })()}
+
+                                {/* Next */}
+                                <button
+                                    onClick={() => router.get('/transmissions', { ...f, page: String(transmissions.current_page + 1) })}
+                                    disabled={transmissions.current_page === transmissions.last_page}
+                                    className="px-2 py-1 text-xs border border-gray-300 rounded text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                                >
+                                    Next ›
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
