@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(docker exec *)",
-      "Bash(docker compose *)"
+      "Bash(docker compose *)",
+      "PowerShell(docker exec dict_boc_app npm run build 2>&1)",
+      "PowerShell(docker exec dict_boc_app sh -c \"rm -rf node_modules && npm ci && npm run build\" 2>&1)"
     ]
   }
 }

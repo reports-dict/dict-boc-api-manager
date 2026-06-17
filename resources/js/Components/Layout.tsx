@@ -51,14 +51,25 @@ export default function Layout({ children, title }: { children: ReactNode; title
                 </nav>
 
                 <div className="px-3 py-3 border-t border-gray-700">
-                    <p className="text-xs text-gray-400 truncate">{auth.user?.name}</p>
-                    <p className="text-xs text-gray-600 truncate">{auth.user?.username}</p>
-                    <button
-                        onClick={handleLogout}
-                        className="mt-2 w-full text-left text-xs text-red-400 hover:text-red-300 transition-colors"
-                    >
-                        Sign out
-                    </button>
+                    {auth.user ? (
+                        <>
+                            <p className="text-xs text-gray-400 truncate">{auth.user.name}</p>
+                            <p className="text-xs text-gray-600 truncate">{auth.user.username}</p>
+                            <button
+                                onClick={handleLogout}
+                                className="mt-2 w-full text-left text-xs text-red-400 hover:text-red-300 transition-colors"
+                            >
+                                Sign out
+                            </button>
+                        </>
+                    ) : (
+                        <Link
+                            href="/login"
+                            className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                        >
+                            Sign in
+                        </Link>
+                    )}
                 </div>
             </aside>
 

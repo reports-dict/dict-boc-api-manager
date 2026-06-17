@@ -93,13 +93,13 @@ export default function TransmissionsIndex({
                                 <th className="px-4 py-2 text-gray-500 font-medium text-right">⊕</th>
                                 <th className="px-4 py-2 text-gray-500 font-medium">By</th>
                                 <th className="px-4 py-2 text-gray-500 font-medium">Sent At</th>
-                                <th className="px-4 py-2"></th>
+                                <th className="px-4 py-2" colSpan={2}></th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
                             {transmissions.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan={11} className="text-center py-10 text-gray-400">No transmissions found.</td>
+                                    <td colSpan={12} className="text-center py-10 text-gray-400">No transmissions found.</td>
                                 </tr>
                             ) : transmissions.data.map((t) => (
                                 <tr key={t.id} className="hover:bg-gray-50 transition-colors">
@@ -118,6 +118,15 @@ export default function TransmissionsIndex({
                                     <td className="px-4 py-2">
                                         <Link href={`/transmissions/${t.id}`}
                                             className="text-blue-600 hover:underline">Details</Link>
+                                    </td>
+                                    <td className="px-4 py-2">
+                                        <a
+                                            href={`/transmissions/${t.id}/download`}
+                                            download
+                                            className="text-green-600 hover:underline"
+                                        >
+                                            Download
+                                        </a>
                                     </td>
                                 </tr>
                             ))}

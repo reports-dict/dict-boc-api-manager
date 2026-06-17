@@ -49,6 +49,24 @@ class TransmissionController extends Controller
         ]);
     }
 
+    public function download(Transmission $transmission)
+    {
+        $payloads = $transmission->records()
+            ->orderBy('id')
+            ->pluck('payload')
+            ->map(fn ($p) => is_array($p) ? $p : json_decode($p, true))
+            ->values()
+            ->all();
+
+        $json     = json_encode(['data' => $payloads], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $filename = "transmission_{$transmission->id}_{$transmission->type}_{$transmission->date_from->toDateString()}.json";
+
+        return response($json, 200, [
+            'Content-Type'        => 'application/json',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ]);
+    }
+
     public function show(Transmission $transmission)
     {
         $records = $transmission->records()
